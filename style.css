@@ -1,65 +1,159 @@
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #388E3C;
+  --light-color: #C8E6C9;
+  --text-color: #333;
+  --bg-color: #f9f9f9;
+}
+
 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
-.Ycontainer {
-  display: grid;
-  grid-template-columns: 75% 25%;
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto; /* pour centrer la grille horizontalement */
-}
- 
-.Ymain {
-  padding: 20px;
-  background-color: orange;
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.Ysidebar {
-  padding: 20px;
-  background-color: silver; /* arrière-plan argenté */
-}
-
-.Ysidebar p {
+nav ul {
+  list-style-type: none;
+  padding: 0;
   margin: 0;
+  display: flex;
+  gap: 1rem;
 }
 
-.Ysidebar a {
-  display: block;
-  margin-bottom: 10px;
-  color: black;
+nav a {
+  color: white;
   text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
 }
 
-.Ysidebar a:hover {
-  color: darkgray;
+nav a:hover {
+  background-color: var(--secondary-color);
 }
 
-Yhr {
-  margin: 20px 0;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.btn {
+  background-color: var(--primary-color);
+  color: white;
   border: none;
-  border-top: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-h1 {
-  text-align: center; /* pour centrer l'élément h1 */
+.btn:hover {
+  background-color: var(--secondary-color);
 }
 
-.grid-container {
+.btn-delete {
+  background-color: #f44336;
+}
+
+.btn-delete:hover {
+  background-color: #d32f2f;
+}
+
+.search-form {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-form input {
+  flex-grow: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.recettes-grid {
   display: grid;
-  grid-template-columns: 10% 10% 10% 10% ; /* Quatre colonnes égales */
-  gap: 10px; /* Espacement entre les éléments */
+  grid-template-columns: 80px 150px 1fr 2fr 2fr 100px;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
 }
 
-.item {
-  background-color: #f0f0f0;
-  padding: 20px;
-  text-align: center;
+.grid-header {
+  font-weight: bold;
+  background-color: var(--light-color);
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
+.grid-item {
+  padding: 0.5rem;
+}
 
-span{
-    text-align: center;
-  }
+.recette-image {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.no-image {
+  width: 100px;
+  height: 100px;
+  background-color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+  border-radius: 4px;
+}
+
+.ingredients-list {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actions a {
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  display: inline-flex;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+}

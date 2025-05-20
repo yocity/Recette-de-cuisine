@@ -3,26 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personne</title>
+    <title>Livre de Recettes</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+        --primary-color: #4CAF50;
+        --secondary-color: #388E3C;
+        --light-color: #C8E6C9;
+        --text-color: #333;
+        --bg-color: #f9f9f9;
+        }
+
+        body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        }
+
+        header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 1rem;
+        }
+
+        nav a {
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+        background-color: var(--secondary-color);
+        }
+
+        .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+        }
+
+        .btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+        background-color: var(--secondary-color);
+        }
+
+        .btn-delete {
+        background-color: #f44336;
+        }
+
+        .btn-delete:hover {
+        background-color: #d32f2f;
+        }
+
+        .search-form {
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        }
+
+        .search-form input {
+        flex-grow: 1;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        }
+
+        .recettes-grid {
+        display: grid;
+        grid-template-columns: 80px 150px 1fr 2fr 2fr 100px;
+        gap: 1rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        align-items: center;
+        }
+
+        .grid-header {
+        font-weight: bold;
+        background-color: var(--light-color);
+        padding: 0.5rem;
+        border-radius: 4px;
+        }
+
+        .grid-item {
+        padding: 0.5rem;
+        }
+
+        .recette-image {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        }
+
+        .no-image {
+        width: 100px;
+        height: 100px;
+        background-color: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #777;
+        border-radius: 4px;
+        }
+
+        .ingredients-list {
+        margin: 0;
+        padding-left: 1rem;
+        }
+
+        .actions {
+        display: flex;
+        gap: 0.5rem;
+        }
+
+        .actions a {
+        color: white;
+        padding: 0.3rem 0.5rem;
+        border-radius: 4px;
+        display: inline-flex;
+        }
+
+        .form-group {
+        margin-bottom: 1rem;
+        }
+
+        .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        }
+
+        .form-group textarea {
+        min-height: 100px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Personne</h1> 
-    <hr>
-    <div class="Ycontainer">
-        <div class="Ymain">
-            <?php echo $zonePrincipale; ?>
+    <header>
+        <div class="container">
+            <h1>Livre de Recettes</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.php?action=accueil"><i class="fas fa-home"></i> Accueil</a></li>
+                    <li><a href="index.php?action=afficher"><i class="fas fa-book"></i> Recettes</a></li>
+                    <li><a href="index.php?action=a-propos"><i class="fas fa-info-circle"></i> À propos</a></li>
+                </ul>
+            </nav>
         </div>
-        <div class="Ysidebar">
-            <p>
-                <a href="index.php?action=tester">Vérifier connection </a>
-                <a href="index.php?action=afficher">Affichage des personnes</a>
-                <a href="index.php?action=saisir">Saisie d'une personne</a>
-            </p>
+    </header>
+
+    <main class="container">
+        <?php echo $zonePrincipale; ?>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <?php echo date('Y'); ?> - Yocoli Konan Jean Epiphane - 1A DM</p>
         </div>
-    </div>
-    <hr>
+    </footer>
 </body>
 </html>

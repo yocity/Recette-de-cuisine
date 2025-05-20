@@ -1,57 +1,148 @@
 <?php
-//Yocoli Konan Jean Epiphane 1A TP10
+include('config.php');
+class Recette {
+    public ?int $id = null;
+    public string $titre = '';
+    public string $description = '';
+    public ?string $image = null;
+    public array $ingredients = [];
 
-// Définition des types pour les variables
+    public function __construct() {}
 
-$nom = null;
-$dateN = null;
-$erreur = ["nom" => null, "dateN" => null];
-
-class Personne { 
-    public $idP;
-    public $nom;
-    public $dateN;
-
-    public function __construct($nom = '', $dateN = '', $idP = null) {
-        $this->nom = $nom;
-        $this->dateN = $dateN;
-        $this->idP = $idP;
+    public function __toString(): string {
+        return "ID: {$this->id} - Titre: {$this->titre} - Description: {$this->description}";
     }
 
-    public function __toString() {
-        return "ID: {$this->idP} - Nom: {$this->nom} - Date de naissance: {$this->dateN}";
+    public static function obtenirToutes(): array {
+        $connection = connecter();
+        if (!$connection) return [];
+
+        $query = $connection->prepare("SELECT * FROM recettes ORDER BY titre");
+        $query->execute();
+
+        $recettes = $query->fetchAll(PDO::FETCH_CLASS, self::class);
+
+        foreach ($recettes as $recette) {
+            $recette->ingredients = self::obtenirIngredients($recette->id);
+        }
+
+        return $recettes;
     }
 
     public function enregistrer(): bool {
         $connection = connecter();
         if (!$connection) return false;
 
-        $query = $connection->prepare("INSERT INTO Personne (nom, dateN) VALUES (?, ?)");
-        $success = $query->execute([$this->nom, $this->dateN]);
+        $query = $connection->prepare("INSERT INTO recettes (titre, description, image) VALUES (?, ?, ?)");
+        $success = $query->execute([$this->titre, $this->description, $this->image]);
+
         if ($success) {
-            $this->idP = $connection->lastInsertId();
+            $this->id = (int)$connection->lastInsertId();
+            foreach ($this->ingredients as $ingredient) {
+                $this->ajouterIngredient($ingredient);
+            }
         }
+
         return $success;
     }
 
-    public function modifier(string $nom, string $dateN): bool {
-        $this->nom = $nom;
-        $this->dateN = $dateN;
+    public function modifier(): bool {
+        if ($this->id === null) return false;
+
         $connection = connecter();
         if (!$connection) return false;
 
-        $query = $connection->prepare("UPDATE Personne SET nom = ?, dateN = ? WHERE idP = ?");
-        return $query->execute([$this->nom, $this->dateN, $this->idP]);
+        $query = $connection->prepare("UPDATE recettes SET titre = ?, description = ?, image = ? WHERE id = ?");
+        $success = $query->execute([$this->titre, $this->description, $this->image, $this->id]);
+
+        if ($success) {
+            $this->supprimerIngredients();
+            foreach ($this->ingredients as $ingredient) {
+                $this->ajouterIngredient($ingredient);
+            }
+        }
+
+        return $success;
     }
 
     public function supprimer(): bool {
+        if ($this->id === null) return false;
+
         $connection = connecter();
         if (!$connection) return false;
 
-        $query = $connection->prepare("DELETE FROM Personne WHERE idP = ?");
-        return $query->execute([$this->idP]);
+        $this->supprimerIngredients();
+        $query = $connection->prepare("DELETE FROM recettes WHERE id = ?");
+        return $query->execute([$this->id]);
+    }
+
+    public function ajouterIngredient(string $ingredient): bool {
+        if ($this->id === null) return false;
+
+        $connection = connecter();
+        if (!$connection) return false;
+
+        $query = $connection->prepare("INSERT INTO ingredients (recette_id, nom) VALUES (?, ?)");
+        return $query->execute([$this->id, $ingredient]);
+    }
+
+    public function supprimerIngredients(): bool {
+        if ($this->id === null) return false;
+
+        $connection = connecter();
+        if (!$connection) return false;
+
+        $query = $connection->prepare("DELETE FROM ingredients WHERE recette_id = ?");
+        return $query->execute([$this->id]);
+    }
+
+    public static function rechercher(string $search): array {
+        $connection = connecter();
+        if (!$connection) return [];
+
+        $searchTerm = '%' . $search . '%';
+        $query = $connection->prepare("
+            SELECT DISTINCT r.* FROM recettes r 
+            LEFT JOIN ingredients i ON r.id = i.recette_id 
+            WHERE r.titre LIKE ? OR r.description LIKE ? OR i.nom LIKE ?
+        ");
+        $query->execute([$searchTerm, $searchTerm, $searchTerm]);
+        $recettes = $query->fetchAll(PDO::FETCH_CLASS, self::class);
+
+        foreach ($recettes as $recette) {
+            $recette->ingredients = self::obtenirIngredients($recette->id);
+        }
+
+        return $recettes;
+    }
+
+    public static function obtenirParId(int $id): ?Recette {
+        $connection = connecter();
+        if (!$connection) return null;
+
+        $query = $connection->prepare("SELECT * FROM recettes WHERE id = ?");
+        $query->execute([$id]);
+        $recette = $query->fetchObject(self::class);
+
+        if ($recette) {
+            $recette->ingredients = self::obtenirIngredients($id);
+        }
+
+        return $recette ?: null;
+    }
+
+    private static function obtenirIngredients(int $recetteId): array {
+        $connection = connecter();
+        if (!$connection) return [];
+
+        $query = $connection->prepare("SELECT nom FROM ingredients WHERE recette_id = ?");
+        $query->execute([$recetteId]);
+
+        return $query->fetchAll(PDO::FETCH_COLUMN);
     }
 }
+
+
 
 function controlerDate(string $valeur): bool {
     if (preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $valeur, $regs)) {
@@ -76,4 +167,5 @@ function connecter(): ?PDO {
         return null;
     }
 }
+
 ?>
