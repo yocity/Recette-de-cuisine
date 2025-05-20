@@ -7,7 +7,7 @@ $nom = null;
 $dateN = null;
 $erreur = ["nom" => null, "dateN" => null];
 
-class Personne {
+class Personne { 
     public $idP;
     public $nom;
     public $dateN;

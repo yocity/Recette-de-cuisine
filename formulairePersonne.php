@@ -5,7 +5,7 @@ if ($idP!='') {$action="index.php?action={$cible}&idP={$idP}";}
 else {$action="index.php?action={$cible}";}
 $corps =<<<EOT
   <form method="post" action="{$action}" name="form_user" >
-  <table>
+  <table> 
       <tr>
         <td><label> Nom</label></td>
         <td><input type="text" name="nom" size="" value="{$nom}"></td>

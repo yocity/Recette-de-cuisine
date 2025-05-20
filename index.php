@@ -4,7 +4,7 @@
 include('donnees.php');
 
 $action = $_GET['action'] ?? null;
-$zonePrincipale = '';
+$zonePrincipale = ''; 
 
 switch ($action) {
     case "tester":
